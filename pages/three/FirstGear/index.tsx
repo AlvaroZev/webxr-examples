@@ -29,7 +29,7 @@ import {
   WebGLRenderer,
 } from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
-import Imagess from "./images/dome_text_image.jpg"
+//import Imagess from "./images/dome_text_image.jpg"
 // Way 1
 // -------------------------------------------------------------------------------------------------
 export default class App extends Component {
@@ -137,6 +137,7 @@ export default class App extends Component {
       // // spriteResponse[3] = { ID: 4, x: 0.5, y: 0, z: 0 };
       // // spriteResponse[4] = { ID: 5, x: 0.25, y: 0.5, z: 0 };
     function planesIndex(width, height, desiredParam){
+
       return 1
     }
     
@@ -158,6 +159,7 @@ export default class App extends Component {
         Rz: i*360/50,
         Ix:planesIndex(spherevalues[0].widthsegments, spherevalues[0].heightsegments, 1),
         Iy:planesIndex(spherevalues[0].widthsegments, spherevalues[0].heightsegments, 2),
+        enable: true,
 
       };
     }
@@ -176,10 +178,10 @@ export default class App extends Component {
       materialImage.needsUpdate = true;
       var geometry_plane = new PlaneGeometry(0.1, 0.1);
 
-      if (i<0) 
+      if (i<154) 
       {
         console.log("ola")
-        var geometry_plane = new PlaneGeometry(20,20);
+        var geometry_plane = new PlaneGeometry(0.2,0.2);
       }
       else 
       {
@@ -199,8 +201,8 @@ export default class App extends Component {
           );
       //planerotation.setFromRotationMatrix(m: sphere.matrixWorld);
       plane.setRotationFromEuler(planerotation);
-      
-      console.log(plane.rotation);//console.log(plane.quaternion)
+      plane.lookAt(0,0,0);
+      //console.log(plane.rotation);//console.log(plane.quaternion)
 
       this.scene.add(plane);
 
