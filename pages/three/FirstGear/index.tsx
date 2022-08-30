@@ -29,7 +29,7 @@ import {
   WebGLRenderer,
 } from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
-
+import Imagess from "./images/dome_text_image.jpg"
 // Way 1
 // -------------------------------------------------------------------------------------------------
 export default class App extends Component {
@@ -67,8 +67,13 @@ export default class App extends Component {
     container.appendChild(this.renderer.domElement);
 
     this.renderer.setAnimationLoop(this.animate.bind(this));
-
-    const geometry = new SphereGeometry(1, 50, 25);
+    var spherevalues = [];
+    spherevalues[0]={
+      radius: 1,
+      widthsegments: 50,
+      heightsegments: 25,
+    }
+    const geometry = new SphereGeometry(spherevalues[0].radius, spherevalues[0].widthsegments, spherevalues[0].heightsegments);
     // const loader = new TextureLoader();
     // const texture = loader.load("/sky.png");
     // const material = new MeshPhongMaterial({ map: texture });
@@ -120,7 +125,21 @@ export default class App extends Component {
 
     const controls = new OrbitControls(this.camera, this.renderer.domElement);
 
-    //crear planos
+      //crear planos
+      //spriteResponse[0] = {
+      //  ID: 1,
+      //  x: 0.5831503868103027,
+      //  y: 0.80901700258255,
+      //  z: 0.07366902381181717,
+      //};
+      // // spriteResponse[1] = { ID: 2, x: 0, y: 0.1, z: 0 };
+      // // spriteResponse[2] = { ID: 3, x: 0, y: 0.5, z: 0 };
+      // // spriteResponse[3] = { ID: 4, x: 0.5, y: 0, z: 0 };
+      // // spriteResponse[4] = { ID: 5, x: 0.25, y: 0.5, z: 0 };
+    function planesIndex(width, height, desiredParam){
+      return 1
+    }
+    
     var planes = [];
 
     var spriteResponse = [];
@@ -137,46 +156,49 @@ export default class App extends Component {
         Rx: i*360/50,
         Ry: i*360/25,
         Rz: i*360/50,
+        Ix:planesIndex(spherevalues[0].widthsegments, spherevalues[0].heightsegments, 1),
+        Iy:planesIndex(spherevalues[0].widthsegments, spherevalues[0].heightsegments, 2),
 
       };
     }
-    //spriteResponse[0] = {
-    //  ID: 1,
-    //  x: 0.5831503868103027,
-    //  y: 0.80901700258255,
-    //  z: 0.07366902381181717,
-    //};
-    // // spriteResponse[1] = { ID: 2, x: 0, y: 0.1, z: 0 };
-    // // spriteResponse[2] = { ID: 3, x: 0, y: 0.5, z: 0 };
-    // // spriteResponse[3] = { ID: 4, x: 0.5, y: 0, z: 0 };
-    // // spriteResponse[4] = { ID: 5, x: 0.25, y: 0.5, z: 0 };
+    
+    const texture = new TextureLoader().load("https://upload.wikimedia.org/wikipedia/commons/thumb/6/62/Starsinthesky.jpg/1920px-Starsinthesky.jpg",
+    );
+    const materialImage = new MeshBasicMaterial( { map: texture } );
 
     for (var i = 0; i < spriteResponse.length; i++) {
-      const material_plane = new MeshBasicMaterial({
-        color: 0xffffff,
+      //const material_plane = new MeshBasicMaterial({color: 0xffffff,side: DoubleSide, });
+
+      const materialImage = new MeshBasicMaterial( { 
+        map: texture ,
         side: DoubleSide,
-      });
-      material_plane.needsUpdate = true;
-      var geometry_plane = new PlaneGeometry(0.01, 0.01);
-      if (i<90) 
+      } );
+      materialImage.needsUpdate = true;
+      var geometry_plane = new PlaneGeometry(0.1, 0.1);
+
+      if (i<0) 
       {
         console.log("ola")
-        var geometry_plane = new PlaneGeometry(0.1,0.1);
+        var geometry_plane = new PlaneGeometry(20,20);
       }
       else 
       {
         console.log("olachao")
       }
-      const plane = new Mesh(geometry_plane, material_plane);
+      const plane = new Mesh(geometry_plane, materialImage);
 
       plane.position.set(
         spriteResponse[i].x,
         spriteResponse[i].y,
         spriteResponse[i].z
       );
-
+        planerotation.set(
+          0.785398,//*spriteResponse[i].Rx,
+          0.785398,//*spriteResponse[i].Rx +1,
+          0.785398,//*spriteResponse[i].Rz
+          );
       //planerotation.setFromRotationMatrix(m: sphere.matrixWorld);
-      //plane.setRotationFromEuler(euler: planerotation );
+      plane.setRotationFromEuler(planerotation);
       
       console.log(plane.rotation);//console.log(plane.quaternion)
 
